@@ -2,15 +2,27 @@ import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 
-const Home = () => {
+function Home() {
     const [data, setData] = useState([])
+    const [deleted, setDeleted] = useState(true)
     useEffect(() => {
-        axios.get('/students')
+        if (deleted) {
+            setDeleted(false)
+            axios.get('http://localhost:5000/students')
+                .then((res) => {
+                    setData(res.data)
+                })
+                .catch((err) => console.log(err))
+        }
+    }, [deleted])
+
+    function handleDelete(id) {
+        axios.delete(`http://localhost:5000/delete/${id}`)
             .then((res) => {
-                setData(res.data)
+                setDeleted(true)
             })
             .catch((err) => console.log(err))
-    }, [])
+    }
 
     return (
         <div className='container-fluid bg-primary vh-100 vw-100'>
@@ -41,7 +53,7 @@ const Home = () => {
                                 <td>
                                     <Link className='btn mx-2 btn-success' to={`/read/${student.id}`}>Read</Link>
                                     <Link className='btn mx-2 btn-success' to={`/edit/${student.id}`}>Edit</Link>
-                                    <button className='btn mx-2 btn-danger'>Delete</button>
+                                    <button onClick={() => handleDelete(student.id)} className='btn mx-2 btn-danger'>Delete</button>
                                 </td>
                             </tr>)
                         })
