@@ -16,7 +16,7 @@ const Read = () => {
 
     return (
         <div className="container-fluid vw-100 vh-100 bg-primary">
-            <h1>User {id}</h1>
+            <h1>Student {id}</h1>
             <Link to="/" className="btn btn-success">Back</Link>
             {data.map((student) => {
                 return (
